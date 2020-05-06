@@ -2,8 +2,7 @@ data Patient = Patient { name :: Name
                        , bloodType:: BloodType }
 instance Show Patient where
   show (Patient (firstName, lastName) bloodType) =
-      firstName ++ " " ++ lastName ++ " " ++
-      "[" ++ show bloodType ++ "]"
+    mconcat [firstName, " ", lastName, " ", "[", show bloodType, "]"]
 
 data BloodType = BloodType { aboType :: ABOType
                            , rhesusType :: RhesusType }
@@ -38,7 +37,7 @@ canDonateTo' (BloodType AB _)       _                      = False
 canDonateTo' (BloodType O _)        _                      = True
 
 showCanDonateTo :: Donor -> Recipient -> String
-showCanDonateTo donor recipient = show donor ++ " " ++ canDonateStr ++ " " ++ show recipient
+showCanDonateTo donor recipient = mconcat [show donor, " ", canDonateStr, " ", show recipient]
   where canDonate = canDonateTo donor recipient
         canDonateStr = (if canDonate then "can" else "can't") ++ " donate to"
 
