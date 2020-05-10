@@ -58,12 +58,8 @@ main = do
   let showCanDonateToJohn donor = showCanDonateTo donor john
 
   putStrLn "== Recipient =="
-  print john
-  putStrLn ""
+  mapM_ putStrLn [show john, ""]
   putStrLn "== Donors =="
-  print jane
-  print jürgen
-  putStrLn ""
+  mapM_ putStrLn ((map show [jane, jürgen]) ++ [""])
   putStrLn "== Results =="
-  putStrLn $ showCanDonateToJohn jane
-  putStrLn $ showCanDonateToJohn jürgen
+  mapM_ (putStrLn . showCanDonateToJohn) [jane, jürgen]
