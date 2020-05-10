@@ -22,44 +22,47 @@ type RecipientBloodType = BloodType
 type Name = (String, String)
 
 canDonateTo :: Donor -> Recipient -> Bool
-canDonateTo donor recipient = canDonateTo' (bloodType donor) (bloodType recipient)
+canDonateTo donor recipient =
+  canDonateTo' (bloodType donor) (bloodType recipient)
 
 canDonateTo' :: DonorBloodType -> RecipientBloodType -> Bool
-canDonateTo' (BloodType _ Positive) (BloodType _ Negative) = False
-canDonateTo' (BloodType A _)        (BloodType A _)        = True
-canDonateTo' (BloodType A _)        (BloodType AB _)       = True
-canDonateTo' (BloodType A _)        _                      = False
-canDonateTo' (BloodType B _)        (BloodType B _)        = True
-canDonateTo' (BloodType B _)        (BloodType AB _)       = True
-canDonateTo' (BloodType B _)         _                     = False
-canDonateTo' (BloodType AB _)       (BloodType AB _)       = True
-canDonateTo' (BloodType AB _)       _                      = False
-canDonateTo' (BloodType O _)        _                      = True
+canDonateTo' (BloodType _  Positive) (BloodType _  Negative) = False
+canDonateTo' (BloodType A  _       ) (BloodType A  _       ) = True
+canDonateTo' (BloodType A  _       ) (BloodType AB _       ) = True
+canDonateTo' (BloodType A  _       ) _                       = False
+canDonateTo' (BloodType B  _       ) (BloodType B  _)        = True
+canDonateTo' (BloodType B  _       ) (BloodType AB _)        = True
+canDonateTo' (BloodType B  _       ) _                       = False
+canDonateTo' (BloodType AB _       ) (BloodType AB _)        = True
+canDonateTo' (BloodType AB _       ) _                       = False
+canDonateTo' (BloodType O  _       ) _                       = True
 
 showCanDonateTo :: Donor -> Recipient -> String
-showCanDonateTo donor recipient = mconcat [show donor, " ", canDonateStr, " ", show recipient]
-  where canDonate = canDonateTo donor recipient
-        canDonateStr = (if canDonate then "can" else "can't") ++ " donate to"
+showCanDonateTo donor recipient = mconcat
+  [show donor, " ", canDonateStr, " ", show recipient]
+ where
+  canDonate    = canDonateTo donor recipient
+  canDonateStr = (if canDonate then "can" else "can't") ++ " donate to"
 
 main :: IO ()
 main = do
-  let john = Patient { name = ("John", "Doe")
-                     , bloodType = BloodType AB Negative }
+  let john =
+        Patient { name = ("John", "Doe"), bloodType = BloodType AB Negative }
 
-  let jane = Patient { name = ("Jane", "Doe")
-                     , bloodType = BloodType A Positive }
+  let jane =
+        Patient { name = ("Jane", "Doe"), bloodType = BloodType A Positive }
 
-  let jürgen = Patient { name = ("Jürgen", "Doe")
-                       , bloodType = BloodType O Negative }
+  let jürgen =
+        Patient { name = ("Jürgen", "Doe"), bloodType = BloodType O Negative }
 
   let showCanDonateToJohn donor = showCanDonateTo donor john
 
   putStrLn "== Recipient =="
-  putStrLn $ show john
+  print john
   putStrLn ""
   putStrLn "== Donors =="
-  putStrLn $ show jane
-  putStrLn $ show jürgen
+  print jane
+  print jürgen
   putStrLn ""
   putStrLn "== Results =="
   putStrLn $ showCanDonateToJohn jane
